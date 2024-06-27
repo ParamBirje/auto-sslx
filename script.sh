@@ -5,21 +5,22 @@ echo "System updated."
 # Installing nginx
 dnf install nginx -y
 # Check if nginx is installed --
-echo "Nginx installed."
+echo "NGINX installed."
 
 systemctl start nginx
 # Check if nginx is running
-echo "Nginx is running."
+echo "NGINX is running."
 
 # Enabling nginx to start on boot
 systemctl enable nginx
 
-# Write server block to /etc/nginx/conf.d/default.conf
-# ---
+# Copying local server block to /etc/nginx/conf.d/default.conf
+cp server-block.conf /etc/nginx/conf.d/default.conf
+echo "Local server block setup and copied to /etc/nginx/conf.d/default.conf"
 
-# Restart nginx
+# Restarting nginx
 systemctl restart nginx
-echo "Nginx restarted."
+echo "Restarted NGINX."
 
 # Installing python3 and augeas-libs
 # for later installing certbot with pip
