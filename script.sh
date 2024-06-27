@@ -1,14 +1,26 @@
+email=$1
+domain=$2
+service_port=$3
+
+echo "Chosen email: $1"
+echo "Chosen domain for SSL and mapping service: $2"
+echo "Your service is running on local port localhost:$3"
+
 # Updating the system
+echo "Updating the system ..."
 dnf update -y
 echo "System updated."
 
 # Installing nginx
 dnf install nginx -y
-# Check if nginx is installed --
+
+# Checking if nginx is installed
+dnf list installed nginx > /dev/null 2>&1 && echo "NGINX installed." || echo "NGINX not installed."
 echo "NGINX installed."
 
 systemctl start nginx
 # Check if nginx is running
+# ---
 echo "NGINX is running."
 
 # Enabling nginx to start on boot
