@@ -16,6 +16,16 @@ echo "Chosen email: $1"
 echo "Chosen domain for SSL and mapping service: $2"
 echo "Your service is running on local port localhost:$3"
 
+echo "Do you want to continue? (y/n)"
+read answer
+
+# Exits the script if the user does not want to continue
+# by checking the first character of the answer
+if [ "$answer" == "${answer#[Yy]}" ] ; then
+    echo "Exiting ..."
+    exit 1
+fi
+
 # Updating the system
 echo "Updating the system ..."
 dnf update -y
