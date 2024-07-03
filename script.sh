@@ -2,9 +2,9 @@
 if [ $# -ne 3 ]; then
     echo "Usage:"
     echo -e "\t$0 <email> <domain> <service_port> \n"
-    echo "<email> \t\t Your email address for the SSL certificate (required)"
-    echo "<domain> \t\t Your domain name for the SSL certificate (required)"
-    echo "<service_port> \t The port on which your service is running (required)"
+    echo -e "<email> \t\t Your email address for the SSL certificate (required)"
+    echo -e "<domain> \t\t Your domain name for the SSL certificate (required)"
+    echo -e "<service_port> \t The port on which your service is running (required)"
     exit 1
 fi
 
