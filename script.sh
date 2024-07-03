@@ -12,9 +12,9 @@ email=$1
 domain=$2
 service_port=$3
 
-echo "Chosen email: $1"
-echo "Chosen domain for SSL and mapping service: $2"
-echo "Your service is running on local port localhost:$3"
+echo "Chosen email: $email"
+echo "Chosen domain for SSL and mapping service: $domain"
+echo "Your service is running on local port localhost:$service_port"
 
 echo "Do you want to continue? (y/n)"
 read answer
@@ -77,4 +77,4 @@ ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 
 # Running certbot to get the certificate
 echo "Running certbot to get the certificate ..."
-certbot --nginx --non-interactive --agree-tos --email your-email@example.com -d yourdomain.com
+certbot --nginx --non-interactive --agree-tos --email $email -d $domain
