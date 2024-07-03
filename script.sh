@@ -40,8 +40,12 @@ echo "NGINX installed."
 
 systemctl start nginx
 # Check if nginx is running
-# ---
-echo "NGINX is running."
+if systemctl is-active --quiet nginx; then
+    echo "NGINX is running."
+else
+    echo "NGINX is not running."
+    exit 1
+fi
 
 # Enabling nginx to start on boot
 systemctl enable nginx
