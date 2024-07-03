@@ -50,6 +50,10 @@ fi
 # Enabling nginx to start on boot
 systemctl enable nginx
 
+# TODO: Write the domain and service_port values 
+#       to the server-block.conf file
+# ---
+
 # Copying local server block to /etc/nginx/conf.d/default.conf
 cp server-block.conf /etc/nginx/conf.d/default.conf
 echo "Local server block setup and copied to /etc/nginx/conf.d/default.conf"
