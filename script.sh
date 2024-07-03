@@ -1,3 +1,6 @@
+# paths
+config_file="./server-block.conf"
+
 # Checking if all the required arguments are provided
 if [ $# -ne 3 ]; then
     echo "Usage:"
@@ -50,9 +53,14 @@ fi
 # Enabling nginx to start on boot
 systemctl enable nginx
 
-# TODO: Write the domain and service_port values 
-#       to the server-block.conf file
-# ---
+# Writing the input args to server-block.conf
+temp_file=$(mktemp)
+new_proxy_pass="127.0.0.1:$service_port"
+
+sed -e "s|^\s*proxy_pass.*$|                proxy_pass $new_proxy_pass;|"     -e "s|^\s*server_name.*$|        server_name $domain;|" "$config_file" > "$temp_file"
+
+# Move the temp_file to the server block in nginx dir
+# --
 
 # Copying local server block to /etc/nginx/conf.d/default.conf
 cp server-block.conf /etc/nginx/conf.d/default.conf
