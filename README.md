@@ -1,4 +1,4 @@
-# auto-sslx
+# AutoSSLx
 
 _A bash CLI tool to ease your nginx and SSL workflows by exposing your web service to the internet with a single command._
 

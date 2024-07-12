@@ -37,7 +37,13 @@ echo -e "\nUpdating the system ..."
 dnf update -y
 echo "System updated."
 
+# Cleaning up previous residual files
+echo -e "\nCleaning up previous residual files ..."
+rm -rf "$nginx_dir"
+dnf remove nginx -y
+
 # Installing nginx
+echo -e "\nInstalling NGINX ..."
 dnf install nginx -y
 
 # Checking if nginx is installed
@@ -115,7 +121,7 @@ for package in "${packages[@]}"; do
 done
 
 # Removing existing certbot installation
-dnf remove certbot
+dnf remove certbot -y
 
 # Installing certbot with a virtual environment
 python3 -m venv /opt/certbot/
