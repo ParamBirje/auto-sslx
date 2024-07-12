@@ -1,5 +1,4 @@
 # Paths
-config_file="./server-block.conf"
 nginx_dir="/etc/nginx/conf.d/default.conf"
 
 # Asking the user for input repeatedly 
@@ -19,11 +18,11 @@ while [[ -z "$service_port" ]]; do
     read service_port
 done
 
-echo "Chosen email: $email"
+echo -e "\nChosen email: $email"
 echo "Chosen domain for SSL and mapping service: $domain"
 echo "Your service is running on local port localhost:$service_port"
 
-echo "Do you want to continue? (y/n)"
+echo -e "\nDo you want to continue? (y/n)"
 read answer
 
 # Exits the script if the user does not want to continue
@@ -34,7 +33,7 @@ if [ "$answer" == "${answer#[Yy]}" ] ; then
 fi
 
 # Updating the system
-echo "Updating the system ..."
+echo -e "\nUpdating the system ..."
 dnf update -y
 echo "System updated."
 
@@ -62,16 +61,32 @@ fi
 # Enabling nginx to start on boot
 systemctl enable nginx
 
-# Writing the input args to server-block.conf
-temp_file=$(mktemp)
-new_proxy_pass="127.0.0.1:$service_port"
+# Writing the input args to server-block
+server_block="server {
+        listen 80;
+        
+        # your domain name
+        server_name $domain;
 
-sed -e "s|^\s*proxy_pass.*$|                proxy_pass $new_proxy_pass;|"     -e "s|^\s*server_name.*$|        server_name $domain;|" "$config_file" > "$temp_file"
+        location / {
+                # The local port your application listens/running on
+                proxy_pass http://127.0.0.1:$service_port;
 
-# Move the temp_file to the server block 
-# in /etc/nginx/conf.d/default.conf
-mv "$temp_file" "$nginx_dir"
-echo "Local server block setup and copied to /etc/nginx/conf.d/default.conf"
+                # Default HTTP headers
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+
+                # Add custom headers here to forward to your service
+                # ---
+        }
+}"
+
+# Write the server block
+# to /etc/nginx/conf.d/default.conf
+printf "%s" "$server_block" > "$nginx_dir"
+echo "Local server block setup and moved to /etc/nginx/conf.d/default.conf"
 
 # Restarting nginx
 systemctl restart nginx

@@ -4,7 +4,9 @@ _A bash CLI tool to ease your nginx and SSL workflows by exposing your web servi
 
 ### Compatibility
 
-Currently works on
+**Not in prod, still unstable.**
+
+Currently working/testing on
 
 - Amazon Linux 2023
 
