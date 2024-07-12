@@ -2,19 +2,22 @@
 config_file="./server-block.conf"
 nginx_dir="/etc/nginx/conf.d/default.conf"
 
-# Checking if all the required arguments are provided
-if [ $# -ne 3 ]; then
-    echo "Usage:"
-    echo -e "\t$0 <email> <domain> <service_port> \n"
-    echo -e "<email> \t\t Your email address for the SSL certificate (required)"
-    echo -e "<domain> \t\t Your domain name for the SSL certificate (required)"
-    echo -e "<service_port> \t The port on which your service is running (required)"
-    exit 1
-fi
+# Asking the user for input repeatedly 
+# until a non-empty string is entered.
+while [[ -z "$email" ]]; do
+    echo "Enter your email address for the SSL certificate (important for expiry updates):"
+    read email
+done
 
-email=$1
-domain=$2
-service_port=$3
+while [[ -z "$domain" ]]; do
+    echo "Enter your domain name you want the certificate for:"
+    read domain
+done
+
+while [[ -z "$service_port" ]]; do
+    echo "Enter the port on which your service is running:"
+    read service_port
+done
 
 echo "Chosen email: $email"
 echo "Chosen domain for SSL and mapping service: $domain"
