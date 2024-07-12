@@ -1,5 +1,6 @@
-# paths
+# Paths
 config_file="./server-block.conf"
+nginx_dir="/etc/nginx/conf.d/default.conf"
 
 # Checking if all the required arguments are provided
 if [ $# -ne 3 ]; then
@@ -38,15 +39,20 @@ echo "System updated."
 dnf install nginx -y
 
 # Checking if nginx is installed
-dnf list installed nginx > /dev/null 2>&1 && echo "NGINX installed." || echo "NGINX not installed."
-echo "NGINX installed."
+if dnf list installed nginx > /dev/null 2>&1; then
+    echo "NGINX installed."
+else
+    echo "Err: NGINX not installed."
+    echo "Try re-running the script."
+    exit 1
+fi
 
 systemctl start nginx
 # Check if nginx is running
 if systemctl is-active --quiet nginx; then
     echo "NGINX is running."
 else
-    echo "NGINX is not running."
+    echo "Err: Could not start NGINX, the process is not running."
     exit 1
 fi
 
@@ -59,21 +65,36 @@ new_proxy_pass="127.0.0.1:$service_port"
 
 sed -e "s|^\s*proxy_pass.*$|                proxy_pass $new_proxy_pass;|"     -e "s|^\s*server_name.*$|        server_name $domain;|" "$config_file" > "$temp_file"
 
-# Move the temp_file to the server block in nginx dir
-# --
-
-# Copying local server block to /etc/nginx/conf.d/default.conf
-cp server-block.conf /etc/nginx/conf.d/default.conf
+# Move the temp_file to the server block 
+# in /etc/nginx/conf.d/default.conf
+mv "$temp_file" "$nginx_dir"
 echo "Local server block setup and copied to /etc/nginx/conf.d/default.conf"
 
 # Restarting nginx
 systemctl restart nginx
 echo "Restarted NGINX."
+# Check if nginx is running
+if systemctl is-active --quiet nginx; then
+    echo "NGINX is running."
+else
+    echo "Err: Could not start NGINX, the process is not running."
+    exit 1
+fi
 
 # Installing python3 and augeas-libs
 # for later installing certbot with pip
-dnf install python3 augeas-libs
-echo "Python3 and augeas-libs installed."
+packages=("python3" "augeas-libs")
+for package in "${packages[@]}"; do
+    dnf install "$package" -y
+
+    # Checking if the package is installed
+    if dnf list installed "$package" > /dev/null 2>&1; then
+        echo "$package is installed."
+    else
+        echo "Err: $package is not installed."
+        exit 1
+    fi
+done
 
 # Removing existing certbot installation
 dnf remove certbot
