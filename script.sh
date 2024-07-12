@@ -1,22 +1,19 @@
 # Paths
 nginx_dir="/etc/nginx/conf.d/default.conf"
 
-# Asking the user for input repeatedly 
-# until a non-empty string is entered.
-while [[ -z "$email" ]]; do
-    echo "Enter your email address for the SSL certificate (important for expiry updates):"
-    read email
-done
+# Checking if all the required arguments are provided
+if [ $# -ne 3 ]; then
+    echo "Arguments Usage:"
+    echo -e "\t <email> <domain> <service_port>"
+    echo -e "\n<email> \t\t Your email address for the SSL certificate (required)"
+    echo -e "<domain> \t\t Your domain name for the SSL certificate (required)"
+    echo -e "<service_port> \t The port on which your service is running (required)"
+    exit 1
+fi
 
-while [[ -z "$domain" ]]; do
-    echo "Enter your domain name you want the certificate for:"
-    read domain
-done
-
-while [[ -z "$service_port" ]]; do
-    echo "Enter the port on which your service is running:"
-    read service_port
-done
+email=$1
+domain=$2
+service_port=$3
 
 echo -e "\nChosen email: $email"
 echo "Chosen domain for SSL and mapping service: $domain"
