@@ -102,8 +102,18 @@ dnf remove certbot
 # Installing certbot with a virtual environment
 python3 -m venv /opt/certbot/
 /opt/certbot/bin/pip install --upgrade pip
-/opt/certbot/bin/pip install certbot certbot-nginx
-echo "Certbot installed."
+
+packages=("certbot" "certbot-nginx")
+for package in "${packages[@]}"; do
+    /opt/certbot/bin/pip install "$package"
+
+    # Checking if the package is installed
+    if /opt/certbot/bin/pip show "$package" > /dev/null 2>&1; then
+        echo "$package is installed."
+    else
+        echo "$package is not installed."
+    fi
+done
 
 # Creating a symbolic link to the certbot binary
 ln -s /opt/certbot/bin/certbot /usr/bin/certbot
