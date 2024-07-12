@@ -22,5 +22,5 @@ Just paste the following command directly into your machine's terminal,
 and before running, make sure you edit `<email>`, `<domain>` and `<service_port>`.
 
 ```
-bash -c "$(curl -sSL https://raw.githubusercontent.com/ParamBirje/auto-sslx/main/script.sh)" - <email> <domain> <service_port>
+sudo bash -c "$(curl -sSL https://raw.githubusercontent.com/ParamBirje/auto-sslx/main/script.sh)" - <email> <domain> <service_port>
 ```
