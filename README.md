@@ -19,6 +19,6 @@ Currently working/testing on
 Just paste the following command directly into your machine's terminal,
 and before running, make sure you edit `<email>`, `<domain>` and `<service_port>`.
 
-```
-sudo bash -c "$(curl -sSL https://dub.sh/autossl)" - <email> <domain> <service_port>
+```bash
+sudo bash -c "$(curl -sSL https://dub.sh/autosslx)" - <email> <domain> <service_port>
 ```
