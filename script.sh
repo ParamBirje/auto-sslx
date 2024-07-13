@@ -1,17 +1,17 @@
 #!/bin/bash
-# 
-#    ___        _        _____ _____ _            
-#   / _ \      | |      /  ___/  ___| |           
-#  / /_\ \_   _| |_ ___ \ `--.\ `--.| |     __  __
+#
+#   ___        _        _____ _____ _
+#  / _ \      | |      /  ___/  ___| |
+# / /_\ \_   _| |_ ___ \ `--.\ `--.| |     __  __
 # |  _  | | | | __/ _ \ `--. \`--. \ |     \ \/ /
-# | | | | |_| | || (_) /\__/ /\__/ / |____  >  < 
+# | | | | |_| | || (_) /\__/ /\__/ / |____  >  <
 # \_| |_/\__,_|\__\___/\____/\____/\_____/ /_/\_\
-# 
-# Description: 
-# A script to automate the setup of NGINX reverse proxy and SSL certificate (Certbot) 
+#
+# Description:
+# A script to automate the setup of NGINX reverse proxy and SSL certificate (Certbot)
 # for a service running on a local port.
-# 
-# 
+#
+#
 # Usage: ./script.sh <email> <domain> <service_port>
 # Example: ./script.sh johndoe@example.com sub.example.com 3000
 #
@@ -92,16 +92,16 @@ fi
 # Enabling nginx to start on boot
 systemctl enable nginx
 
-# 
+#
 # ----
 #   SERVER BLOCK CONFIGURATION
 # ----
-# 
+#
 
 # Writing the input args to server-block
 server_block="server {
         listen 80;
-        
+
         # your domain name
         server_name $domain;
 
