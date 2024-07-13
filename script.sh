@@ -17,9 +17,22 @@
 #
 #
 
-# CONSTANT PATH
+# ----
+#   CONSTANTS
+# ----
+
 # The path to the nginx server block
 nginx_dir="/etc/nginx/conf.d/default.conf"
+
+# Color codes for the output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# ----
+#   MAIN FLOW
+# ----
 
 # Condition:
 # Checking if all the required arguments are provided
@@ -41,21 +54,21 @@ echo -e "\nChosen email: $email"
 echo "Chosen domain for SSL and mapping service: $domain"
 echo "Your service is running on local port localhost:$service_port"
 
-echo -e "\nDo you want to continue? (y/n)"
+echo -e "\n${YELLOW}Do you want to continue? (y/n) ${NC}"
 read answer
 
 # Condition:
 # Exits the script if the user does not want to continue
 # by checking the first character of the answer
 if [ "$answer" == "${answer#[Yy]}" ] ; then
-    echo "Exiting ..."
+    echo -e "${RED}Exiting ...${NC}"
     exit 1
 fi
 
 # Updating the system
 echo -e "\nUpdating the system ..."
 dnf update -y
-echo "System updated."
+echo -e "\n${GREEN}System updated.${NC}"
 
 # Cleaning up previous residual files
 # and removing the existing nginx installation
@@ -70,12 +83,13 @@ dnf install nginx -y
 # Condition:
 # Checking if nginx is installed correctly
 if dnf list installed nginx > /dev/null 2>&1; then
-    echo "NGINX installed."
+    echo -e "${GREEN}NGINX installed."
 else
-    echo "Err: NGINX not installed."
+    echo -e "${RED}Err: NGINX not installed."
     echo "Try re-running the script."
     exit 1
 fi
+echo -e "${NC}"
 
 # Starting nginx service
 systemctl start nginx
@@ -83,20 +97,19 @@ systemctl start nginx
 # Condition:
 # Checking if nginx is running
 if systemctl is-active --quiet nginx; then
-    echo "NGINX is running."
+    echo -e "${GREEN}NGINX is running."
 else
-    echo "Err: Could not start NGINX, the process is not running."
+    echo -e "${RED}Err: Could not start NGINX, the process is not running."
     exit 1
 fi
+echo -e "${NC}"
 
 # Enabling nginx to start on boot
 systemctl enable nginx
 
-#
 # ----
 #   SERVER BLOCK CONFIGURATION
 # ----
-#
 
 # Writing the input args to server-block
 server_block="server {
@@ -123,7 +136,7 @@ server_block="server {
 # Write the server block
 # to /etc/nginx/conf.d/default.conf
 printf "%s" "$server_block" > "$nginx_dir"
-echo "Local server block setup and moved to /etc/nginx/conf.d/default.conf"
+echo -e "${GREEN}Local server block setup and moved to $nginx_dir ${NC}"
 
 # Restarting nginx
 systemctl restart nginx
@@ -133,7 +146,7 @@ echo "Restarted NGINX."
 if systemctl is-active --quiet nginx; then
     echo "NGINX is running."
 else
-    echo "Err: Could not start NGINX, the process is not running."
+    echo -e "${RED}Err: Could not start NGINX, the process is not running.${NC}"
     exit 1
 fi
 
@@ -148,11 +161,12 @@ for package in "${packages[@]}"; do
     # Condition:
     # Checking if the package is installed
     if dnf list installed "$package" > /dev/null 2>&1; then
-        echo "$package is installed."
+        echo -e "${GREEN}$package is installed."
     else
-        echo "Err: $package is not installed."
+        echo -e "${RED}Err: $package is not installed."
         exit 1
     fi
+    echo -e "${NC}"
 done
 
 # Removing existing certbot installation
@@ -170,10 +184,11 @@ for package in "${packages[@]}"; do
     # Condition:
     # Checking if the package is installed
     if /opt/certbot/bin/pip show "$package" > /dev/null 2>&1; then
-        echo "$package is installed."
+        echo -e "${GREEN}$package is installed."
     else
-        echo "$package is not installed."
+        echo -e "${RED}$package is not installed."
     fi
+    echo -e "${NC}"
 done
 
 # Creating a symbolic link to the certbot binary
@@ -181,5 +196,5 @@ done
 ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 
 # Running certbot to get the certificate
-echo "Running certbot to get the certificate ..."
+echo -e "${YELLOW}Running certbot to get the certificate ...${NC}"
 certbot --nginx --non-interactive --agree-tos --email $email -d $domain
