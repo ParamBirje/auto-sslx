@@ -2,13 +2,13 @@
 
 _A bash CLI tool to ease your nginx and SSL workflows by exposing your web service to the internet with a single command._
 
-### Compatibility
+## Compatibility
 
-Currently working/testing on
+Currently working on
 
 - Amazon Linux 2023
 
-### Usage
+## Usage
 
 **Args**
 
@@ -16,9 +16,24 @@ Currently working/testing on
 - `<domain>` Your domain name for the SSL certificate (required)
 - `<service_port>` The port on which your service is running (required)
 
-Just paste the following command directly into your machine's terminal,
-and before running, make sure you edit `<email>`, `<domain>` and `<service_port>`.
+### Easy execution (single command - default settings)
 
 ```bash
 sudo bash -c "$(curl -sSL https://dub.sh/autosslx)" - <email> <domain> <service_port>
 ```
+
+Just paste the command above directly into your machine's terminal,
+and before running, make sure you edit `<email>`, `<domain>` and `<service_port>`.
+
+### Customized execution
+
+For a customized run, you can execute the following command in your machine which
+will get you a `autosslx.sh` script locally which you can edit to your needs.
+
+```bash
+curl -sSL https://dub.sh/autosslx -o autosslx.sh
+```
+
+**Alternatively**, you can fork this repo and make a script tailored for your usecases!
+
+I have tried to document everything in the script, so it should be relatively easier to make it your own.
