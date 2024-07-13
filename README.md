@@ -4,8 +4,6 @@ _A bash CLI tool to ease your nginx and SSL workflows by exposing your web servi
 
 ### Compatibility
 
-**Not in prod, still unstable.**
-
 Currently working/testing on
 
 - Amazon Linux 2023
@@ -22,5 +20,5 @@ Just paste the following command directly into your machine's terminal,
 and before running, make sure you edit `<email>`, `<domain>` and `<service_port>`.
 
 ```
-sudo bash -c "$(curl -sSL https://raw.githubusercontent.com/ParamBirje/auto-sslx/main/script.sh)" - <email> <domain> <service_port>
+sudo bash -c "$(curl -sSL https://dub.sh/autossl)" - <email> <domain> <service_port>
 ```
