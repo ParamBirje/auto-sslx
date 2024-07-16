@@ -6,9 +6,14 @@ _A bash CLI tool to ease your nginx and SSL workflows by exposing your web servi
 
 Currently working on
 
-- Amazon Linux 2023
+- Amazon Linux 2023 (Fedora)
 
 ## Usage
+
+**Requirements / Steps**
+1. Have your service running locally on a port (using Docker or PM2). Do **not** use port 80 or 443.
+2. Configure your DNS (A record) to point to the machine's public IP address.
+3. Now run [autosslx](#easy-execution-single-command---default-settings) on the machine.
 
 **Args**
 
